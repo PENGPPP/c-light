@@ -6,7 +6,7 @@
 #define H 512
 #define TWO_PI 6.28318530718f
 #define N 64
-#define MAX_STEP 10
+#define MAX_STEP 64
 #define MAX_DIS 2.0f
 #define EPSILON 1e-6f
 
@@ -92,6 +92,12 @@ Result sence(float x, float y)
     Result d = { boxSDF(x, y, 0.5f, 0.5f, TWO_PI / 16.0f, 0.3f, 0.1f), 1.0f };
     return d;
 #elif 1
+    Result a = { capsuleSDF(x, y, 0.3f, 0.3f, 0.3f, 0.7f, 0.005f), 1.0f };
+    Result b = { capsuleSDF(x, y, 0.3f, 0.7f, 0.5f, 0.3f, 0.005f), 1.0f };
+    Result c = { capsuleSDF(x, y, 0.5f, 0.3f, 0.7f, 0.7f, 0.005f), 1.0f };
+    Result d = { capsuleSDF(x, y, 0.7f, 0.7f, 0.7f, 0.3f, 0.005f), 1.0f };
+    return unionOp(d, unionOp(c, unionOp(a, b)));
+#elif 0
     Result f = { triangleSDF(x, y, 0.5f, 0.2f, 0.8f, 0.8f, 0.3f, 0.6f), 1.0f };
     return f;
 #else
@@ -137,6 +143,6 @@ int main()
         for(int x = 0;  x< W; x++, p+=3)
             p[0] = p[1] = p[2] = (int)fminf(sample((float)x / W, (float)y / H) * 255.0f, 255.0f);
 
-    svpng(fopen("Triangle_random_sampling_trace_max_step_10.png", "wb"), W, H, img, 0);
+    svpng(fopen("Invert_M_random_sampling_trace_max_step_64.png", "wb"), W, H, img, 0);
     return 0;
 }
